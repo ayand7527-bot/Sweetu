@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-handwriting: 'Caveat', cursive;
+    --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+}
+
+.font-serif {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+.font-handwriting {
+  font-family: 'Caveat', cursive;
+}
+
+.font-sans {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+/* Custom glow and paper styles */
+.glow-text-subtle {
+  text-shadow: 0 0 24px rgba(244, 182, 194, 0.35), 0 0 48px rgba(184, 64, 94, 0.2);
+}
+
+.glow-heart {
+  filter: drop-shadow(0 0 16px rgba(230, 80, 115, 0.45));
+}
+
+.paper-parchment {
+  background-color: #FAF6EE;
+  background-image: 
+    radial-gradient(#E8DFC8 0.75px, transparent 0.75px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(246, 237, 222, 0.95));
+  background-size: 16px 16px, 100% 100%;
+  box-shadow: 
+    0 10px 30px -10px rgba(0, 0, 0, 0.4),
+    0 20px 40px -15px rgba(35, 10, 20, 0.25),
+    inset 0 0 80px rgba(214, 196, 168, 0.25);
+}
+
+.letter-ruled-lines {
+  background-image: linear-gradient(rgba(184, 160, 140, 0.15) 1px, transparent 1px);
+  background-size: 100% 2.2rem;
+  line-height: 2.2rem;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(20, 10, 15, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(184, 64, 94, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(184, 64, 94, 0.6);
+}

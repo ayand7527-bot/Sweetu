@@ -1,0 +1,6 @@
+{
+  "name": "A Letter For My Best Friend",
+  "description": "A sincere, heartfelt apology and tribute to a meaningful friendship.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
