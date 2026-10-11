@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { Heart } from 'lucide-react';
 
@@ -8,21 +8,30 @@ interface EnvelopeProps {
 
 export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const timeoutRef = useRef<number | null>(null);
 
   const handleOpenClick = () => {
     if (isOpen) return;
     setIsOpen(true);
     // Smooth delay so the visual opening sequence completes before moving to page 2
-    setTimeout(() => {
+    timeoutRef.current = window.setTimeout(() => {
       onOpen();
     }, 1100);
   };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="relative flex flex-col items-center justify-center">
       {/* 3D Envelope Container */}
       <div 
-        className="relative w-72 sm:w-84 h-48 sm:h-54 cursor-pointer select-none transition-transform duration-300 hover:scale-[1.02]"
+        className="relative w-72 sm:w-80 h-48 sm:h-52 cursor-pointer select-none transition-transform duration-300 hover:scale-[1.02]"
         onClick={handleOpenClick}
         role="button"
         tabIndex={0}
@@ -46,7 +55,7 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
         <motion.div
           initial={{ y: 0, opacity: 0.85 }}
           animate={isOpen ? { y: -70, opacity: 1, scale: 1.02 } : { y: 0, opacity: 0.85 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.25 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const, delay: 0.25 }}
           className="absolute inset-x-4 top-3 bottom-3 rounded-lg paper-parchment p-3 shadow-md flex flex-col justify-between border border-[#D5C2A5]"
         >
           <div className="flex items-center justify-between border-b border-[#D5C2A5]/40 pb-1.5">
@@ -93,7 +102,7 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onOpen }) => {
           className="absolute top-0 inset-x-0 h-1/2 origin-top z-20 pointer-events-none"
           initial={{ rotateX: 0 }}
           animate={isOpen ? { rotateX: 180, zIndex: 1 } : { rotateX: 0, zIndex: 20 }}
-          transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+          transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] as const }}
           style={{
             transformStyle: 'preserve-3d',
           }}

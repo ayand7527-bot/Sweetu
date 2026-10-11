@@ -16,17 +16,27 @@ export default function App() {
 
   const totalPages = 5;
 
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
   // Handle user starting audio
   const startAudioIfAllowed = useCallback(() => {
-    if (!ambientSound.getIsPlaying()) {
-      ambientSound.start();
-      setIsAudioPlaying(true);
+    try {
+      if (!ambientSound.getIsPlaying()) {
+        ambientSound.start();
+        setIsAudioPlaying(ambientSound.getIsPlaying());
+      }
+    } catch {
+      // Safe audio fallback
     }
   }, []);
 
   const handleToggleAudio = useCallback(() => {
-    const active = ambientSound.toggleMute();
-    setIsAudioPlaying(active);
+    try {
+      const active = ambientSound.toggleMute();
+      setIsAudioPlaying(active);
+    } catch {
+      setIsAudioPlaying(false);
+    }
   }, []);
 
   const goToNext = useCallback(() => {
@@ -43,6 +53,23 @@ export default function App() {
       setCurrentPage((prev) => prev - 1);
     }
   }, [currentPage]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX - touchEndX;
+    // Swipe left -> next, Swipe right -> prev
+    if (diff > 60 && currentPage < totalPages) {
+      goToNext();
+    } else if (diff < -60 && currentPage > 1) {
+      goToPrev();
+    }
+    setTouchStartX(null);
+  };
 
   const goToPage = useCallback(
     (page: number) => {
@@ -128,7 +155,11 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="relative flex-1 flex items-center justify-center w-full px-2 sm:px-4 py-4 sm:py-6">
+      <main
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        className="relative flex-1 flex items-center justify-center w-full px-2 sm:px-4 py-4 sm:py-6"
+      >
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentPage}
@@ -157,7 +188,7 @@ export default function App() {
       </main>
 
       {/* Discreet bottom footer */}
-      <footer className="w-full py-3 px-4 text-center text-[11px] text-[#A68896] tracking-wider font-sans border-t border-[#2A0E1A]/40 bg-[#120D12]/60 backdrop-blur-xs">
+      <footer className="w-full py-3 px-4 text-center text-[11px] text-[#A68896] tracking-wider font-sans border-t border-[#2A0E1A]/40 bg-[#120D12]/60 backdrop-blur-sm">
         <div className="max-w-xl mx-auto flex items-center justify-between">
           <span>Made sincerely from the heart</span>
           <span>Best friends forever 🫂</span>

@@ -7,7 +7,7 @@ interface Page2ApologyProps {
   onPrev: () => void;
 }
 
-export const Page2Apology: React.FC<Page2ApologyProps> = ({ onNext }) => {
+export const Page2Apology: React.FC<Page2ApologyProps> = ({ onNext, onPrev }) => {
   const paragraphs = [
     {
       id: 'greeting',
@@ -85,7 +85,7 @@ export const Page2Apology: React.FC<Page2ApologyProps> = ({ onNext }) => {
               transition={{
                 duration: 0.8,
                 delay: 0.2 + idx * 0.45,
-                ease: [0.16, 1, 0.3, 1],
+                ease: [0.16, 1, 0.3, 1] as const,
               }}
             >
               {p.isHeading ? (
@@ -105,13 +105,21 @@ export const Page2Apology: React.FC<Page2ApologyProps> = ({ onNext }) => {
           ))}
         </div>
 
-        {/* Action button to continue */}
+        {/* Action buttons */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 2.1 }}
-          className="mt-8 pt-4 border-t border-[#3E1424]/60 flex justify-end"
+          className="mt-8 pt-4 border-t border-[#3E1424]/60 flex items-center justify-between"
         >
+          <button
+            type="button"
+            onClick={onPrev}
+            className="inline-flex items-center gap-1.5 px-3 py-2 text-[#CFAFBD] hover:text-[#FAF6EE] rounded-full hover:bg-[#2D0F1E] transition-colors text-sm font-sans min-h-[44px] cursor-pointer"
+          >
+            <span>Back</span>
+          </button>
+
           <button
             type="button"
             onClick={onNext}

@@ -13,7 +13,9 @@ interface Particle {
   alpha: number;
   maxAlpha: number;
   pulseSpeed: number;
-  color: string;
+  r: number;
+  g: number;
+  b: number;
 }
 
 export const ParticleCanvas: React.FC<ParticleCanvasProps> = ({ mode }) => {
@@ -27,57 +29,61 @@ export const ParticleCanvas: React.FC<ParticleCanvasProps> = ({ mode }) => {
     if (!ctx) return;
 
     let animationFrameId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    let width = (canvas.width = window.innerWidth || 360);
+    let height = (canvas.height = window.innerHeight || 640);
 
-    const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-      initParticles();
-    };
+    const warmPalette = [
+      { r: 247, g: 214, b: 216 }, // blush pink
+      { r: 230, g: 160, b: 180 }, // rose
+      { r: 244, g: 234, b: 212 }, // cream
+      { r: 210, g: 130, b: 150 }, // warm muted rose
+    ];
 
-    window.addEventListener('resize', handleResize);
+    const starPalette = [
+      { r: 255, g: 255, b: 255 }, // pure star
+      { r: 245, g: 225, b: 235 }, // soft blush star
+      { r: 230, g: 215, b: 250 }, // subtle lavender
+      { r: 255, g: 245, b: 220 }, // soft warm starlight
+    ];
 
     const particles: Particle[] = [];
-    const count = mode === 'stars' ? (width < 640 ? 55 : 90) : (width < 640 ? 35 : 55);
+    const count = mode === 'stars' ? (width < 640 ? 50 : 85) : (width < 640 ? 30 : 50);
 
     const initParticles = () => {
       particles.length = 0;
+      const palette = mode === 'ambient' ? warmPalette : starPalette;
+
       for (let i = 0; i < count; i++) {
         const isWarm = mode === 'ambient';
-        const colors = isWarm
-          ? [
-              'rgba(247, 214, 216,', // blush pink
-              'rgba(230, 160, 180,', // rose
-              'rgba(244, 234, 212,', // cream
-              'rgba(200, 120, 140,', // warm muted rose
-            ]
-          : [
-              'rgba(255, 255, 255,', // pure star
-              'rgba(240, 220, 230,', // soft blush star
-              'rgba(220, 205, 245,', // subtle lavender
-              'rgba(255, 245, 215,', // soft warm starlight
-            ];
-
-        const chosenColor = colors[Math.floor(Math.random() * colors.length)];
+        const color = palette[Math.floor(Math.random() * palette.length)];
         const maxAlpha = 0.35 + Math.random() * 0.55;
 
         particles.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          size: Math.random() * (isWarm ? 2.8 : 1.8) + 0.6,
-          speedX: (Math.random() - 0.5) * (isWarm ? 0.3 : 0.15),
-          speedY: isWarm ? -(Math.random() * 0.35 + 0.1) : (Math.random() - 0.5) * 0.15,
+          size: Math.random() * (isWarm ? 2.5 : 1.6) + 0.6,
+          speedX: (Math.random() - 0.5) * (isWarm ? 0.25 : 0.12),
+          speedY: isWarm ? -(Math.random() * 0.3 + 0.08) : (Math.random() - 0.5) * 0.12,
           alpha: Math.random() * maxAlpha,
           maxAlpha,
           pulseSpeed: Math.random() * 0.015 + 0.005,
-          color: chosenColor,
+          r: color.r,
+          g: color.g,
+          b: color.b,
         });
       }
     };
 
     initParticles();
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth || 360;
+      height = canvas.height = window.innerHeight || 640;
+      initParticles();
+    };
+
+    window.addEventListener('resize', handleResize);
 
     // Render loop
     const render = () => {
@@ -88,7 +94,7 @@ export const ParticleCanvas: React.FC<ParticleCanvasProps> = ({ mode }) => {
 
         // Pulse brightness
         p.alpha += p.pulseSpeed;
-        if (p.alpha > p.maxAlpha || p.alpha < 0.15) {
+        if (p.alpha > p.maxAlpha || p.alpha < 0.12) {
           p.pulseSpeed = -p.pulseSpeed;
         }
 
@@ -102,16 +108,18 @@ export const ParticleCanvas: React.FC<ParticleCanvasProps> = ({ mode }) => {
         if (p.y < 0) p.y = height;
         if (p.y > height) p.y = 0;
 
+        const safeAlpha = Math.max(0, Math.min(1, p.alpha));
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `${p.color} ${Math.max(0, Math.min(1, p.alpha))})`;
+        ctx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${safeAlpha.toFixed(2)})`;
         ctx.fill();
 
-        // Optional tiny glow for larger particles
+        // Subtle glow for larger particles
         if (p.size > 2.0) {
           ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size * 2.2, 0, Math.PI * 2);
-          ctx.fillStyle = `${p.color} ${Math.max(0, p.alpha * 0.25)})`;
+          ctx.arc(p.x, p.y, p.size * 2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${(safeAlpha * 0.25).toFixed(2)})`;
           ctx.fill();
         }
       }

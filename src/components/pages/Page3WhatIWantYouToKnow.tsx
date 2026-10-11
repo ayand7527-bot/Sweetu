@@ -69,7 +69,7 @@ export const Page3WhatIWantYouToKnow: React.FC<Page3WhatIWantYouToKnowProps> = (
             transition={{
               duration: 0.7,
               delay: 0.8 + idx * 0.5,
-              ease: [0.16, 1, 0.3, 1],
+              ease: [0.16, 1, 0.3, 1] as const,
             }}
             className={`p-4 rounded-xl transition-all ${
               line.highlight

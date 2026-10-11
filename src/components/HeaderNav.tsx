@@ -41,7 +41,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
               className="inline-flex items-center gap-1 text-xs text-[#E0CFD6] hover:text-white px-2 py-1 rounded-md hover:bg-white/5 transition-colors cursor-pointer min-h-[40px]"
             >
               <ChevronLeft className="w-4 h-4 text-[#F4B6C2]" />
-              <span className="hidden xs:inline">Back</span>
+              <span className="text-xs">Back</span>
             </button>
           ) : (
             <span className="font-serif italic text-xs text-[#C5A8B5] tracking-wide">

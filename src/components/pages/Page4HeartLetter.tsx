@@ -25,7 +25,7 @@ export const Page4HeartLetter: React.FC<Page4HeartLetterProps> = ({ onNext, onPr
       <motion.div
         initial={{ opacity: 0, y: 25, rotate: -0.5 }}
         animate={{ opacity: 1, y: 0, rotate: 0 }}
-        transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] as const }}
         className="w-full relative paper-parchment rounded-xl p-6 sm:p-9 border border-[#DECDB3] text-[#2C1810] shadow-[0_20px_50px_rgba(0,0,0,0.5),0_2px_10px_rgba(40,10,20,0.2)]"
       >
         {/* Subtle decorative paper watermark & wax stamp */}

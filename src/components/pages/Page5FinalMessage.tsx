@@ -93,7 +93,7 @@ export const Page5FinalMessage: React.FC<Page5FinalMessageProps> = ({ onPrev, on
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as const }}
               className="p-6 sm:p-7 rounded-2xl bg-gradient-to-b from-[#331121]/95 to-[#1E0914]/95 border border-[#8C2B4E]/60 shadow-2xl text-center space-y-4"
             >
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#B8405E]/20 text-[#F4B6C2] mb-1">
@@ -124,7 +124,7 @@ export const Page5FinalMessage: React.FC<Page5FinalMessageProps> = ({ onPrev, on
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as const }}
               className="p-6 sm:p-7 rounded-2xl bg-gradient-to-b from-[#250F1B]/95 to-[#160610]/95 border border-[#591C33]/60 shadow-2xl text-center space-y-4"
             >
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#591C33]/40 text-[#F0E6EC] mb-1">
